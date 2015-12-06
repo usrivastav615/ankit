@@ -1,7 +1,10 @@
 package com.example.smartcart;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +19,7 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -44,16 +48,7 @@ public class loginPage extends ActionBarActivity {
 	public Button myCart;
 	public EditText phoneNo;
 	public TextView mTextView = null;
-	public TextView mWifiList = null;
 
-	public static WifiManager wifiManager;
-	public WifiBroadcastReceiver wifiBroadcastReceiver;
-	public IntentFilter wifiIntentFilter;
-	public Date lastWifiScanTime;
-	private final static String LOCATION_KEY                         = "location-key";
-	private final static String LAST_LOCATION_UPDATE_TIME_STRING_KEY = "last-location-update-time-string-key";
-	private final static String LAST_WIFI_SCAN_TIME_STRING_KEY       = "last-wifi-scan-time-string-key";
-	private final static String LOGGING_ENABLED_KEY                  = "logging-enabled-key";
 
 	public static final long WIFI_SCAN_DELAY_MILLIS = 2000;
 
@@ -79,11 +74,12 @@ public class loginPage extends ActionBarActivity {
 		mTagContent = (LinearLayout) findViewById(R.id.list);
 		
 		myCart = (Button) findViewById(R.id.myCartButtonId);
-		mWifiList = (TextView)findViewById(R.id.wifiList);
+
 		mTextView = (TextView)findViewById(R.id.minWifi);
-		
+
 		myCart.setOnClickListener(new View.OnClickListener() {
 
+			@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -94,17 +90,10 @@ public class loginPage extends ActionBarActivity {
 				bundle.putString("send_data", message);
 				i.putExtras(bundle);
 				startActivity(i);
-
 			}
 		});
 
-		if (savedInstanceState != null) {
-			if (savedInstanceState.keySet().contains(LAST_WIFI_SCAN_TIME_STRING_KEY)) {
-				lastWifiScanTime = new Date(savedInstanceState.getLong(LAST_WIFI_SCAN_TIME_STRING_KEY));
-			}
-		}
-		initWifiScan();
-		wifiManager.startScan();
+
 		mAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (mAdapter == null) {
 			showMessage("error", "no nfc");
@@ -142,19 +131,12 @@ public class loginPage extends ActionBarActivity {
 		return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
 	}
 
-	private void initWifiScan() {
-		wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		wifiBroadcastReceiver = new WifiBroadcastReceiver(this);
-		wifiIntentFilter = new IntentFilter();
-		wifiIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		this.registerReceiver(wifiBroadcastReceiver, wifiIntentFilter);
-	}
+
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		this.registerReceiver(wifiBroadcastReceiver, wifiIntentFilter);
-		wifiManager.startScan();
+
 		if (mAdapter != null) {
 			if (!mAdapter.isEnabled()) {
 				showWirelessSettingsDialog();
@@ -339,7 +321,6 @@ public class loginPage extends ActionBarActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		this.unregisterReceiver(wifiBroadcastReceiver);
 		if (mAdapter != null) {
 			mAdapter.disableForegroundDispatch(this);
 			mAdapter.disableForegroundNdefPush(this);

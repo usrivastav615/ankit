@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 
+import com.example.smartcart.fragments.NotificationFragment;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -24,7 +26,7 @@ import java.util.regex.Pattern;
  * logs location (and accuracy) and Wifis (SSID, BSSID, strength) to disk
  */
 public class WifiBroadcastReceiver extends BroadcastReceiver {
-    private final loginPage m;
+    private final MainActivity m;
 
     private final Comparator<ScanResult> RSSI_ORDER =
             new Comparator<ScanResult>() {
@@ -43,7 +45,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     NotificationManager manager;
     Notification myNotication;
 
-    public WifiBroadcastReceiver(loginPage m) {
+    public WifiBroadcastReceiver(MainActivity m) {
         this.m = m;
         wifiScanTimer = new Timer(WIFI_SCAN_TIMER);
         manager = (NotificationManager) m.getSystemService(m.NOTIFICATION_SERVICE);
@@ -52,7 +54,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
-        List<ScanResult> scanResultList = loginPage.wifiManager.getScanResults();
+        List<ScanResult> scanResultList = MainActivity.wifiManager.getScanResults();
         m.lastWifiScanTime = new Date();
 
         Collections.sort(scanResultList, RSSI_ORDER);
@@ -64,7 +66,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
         double mini = 200000;
         if(scanResultList.size() > 0)
         {
-            m.mTextView.setText("You are near to wifi : " + scanResultList.get(0).SSID);
+            //m.mTextView.setText("You are near to wifi : " + scanResultList.get(0).SSID);
 
             Intent resultIntent = new Intent(m, MainActivity.class);
 
@@ -86,6 +88,20 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             myNotication = builder.getNotification();
             myNotication.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
             manager.notify(11, myNotication);
+
+            if(NotificationFragment.mAdapter != null && NotificationFragment.mKeys != null)
+            {
+                if(!NotificationFragment.mKeys.containsKey(scanResultList.get(0).BSSID)) {
+
+                    NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
+                    NotificationFragment.mAdapter.notifyDataSetChanged();
+                    NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                }
+                else
+                {
+
+                }
+            }
         }
         for (ScanResult wifi : scanResultList) {
 //            if (!filter.matcher(wifi.SSID).matches()) {
@@ -99,8 +115,6 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             double z = y;
             //log(wifi, NOT_SPECIAL);
         }
-        m.mWifiList.setText(combined);
-
         // if no log entry was triggered (i.e., no wifis that matched the filter),
         // write special entry signifying that no wifi was in range
         if (!atLeastOneLogged) {
@@ -114,7 +128,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
         wifiScanTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    loginPage.wifiManager.startScan();
+                    MainActivity.wifiManager.startScan();
                 }
             }, loginPage.WIFI_SCAN_DELAY_MILLIS);
     }

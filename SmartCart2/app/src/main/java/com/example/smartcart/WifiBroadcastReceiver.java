@@ -1,6 +1,9 @@
 package com.example.smartcart;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,12 +40,16 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     private static final int NOT_SPECIAL = 0;
     private static final int SPECIAL_NO_VISIBLE_WIFI = 1;
     public static ScanResult mMinWifi = null;
+    NotificationManager manager;
+    Notification myNotication;
 
     public WifiBroadcastReceiver(loginPage m) {
         this.m = m;
         wifiScanTimer = new Timer(WIFI_SCAN_TIMER);
+        manager = (NotificationManager) m.getSystemService(m.NOTIFICATION_SERVICE);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
         List<ScanResult> scanResultList = loginPage.wifiManager.getScanResults();
@@ -58,6 +65,27 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
         if(scanResultList.size() > 0)
         {
             m.mTextView.setText("You are near to wifi : " + scanResultList.get(0).SSID);
+
+            Intent resultIntent = new Intent(m, MainActivity.class);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(m, 1, resultIntent, 0);
+
+            Notification.Builder builder = new Notification.Builder(m);
+
+            builder.setAutoCancel(false);
+            builder.setTicker("this is ticker text");
+            builder.setContentTitle(scanResultList.get(0).SSID + " Notification");
+            builder.setContentText("You have an offer from " + scanResultList.get(0).SSID);
+            builder.setSmallIcon(R.drawable.ic_launcher);
+            builder.setContentIntent(pendingIntent);
+            builder.setOngoing(true);
+            builder.setSubText(scanResultList.get(0).BSSID);   //API level 16
+            builder.setNumber(100);
+            builder.build();
+
+            myNotication = builder.getNotification();
+            myNotication.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+            manager.notify(11, myNotication);
         }
         for (ScanResult wifi : scanResultList) {
 //            if (!filter.matcher(wifi.SSID).matches()) {

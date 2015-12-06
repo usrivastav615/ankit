@@ -26,6 +26,23 @@ import java.util.regex.Pattern;
  * logs location (and accuracy) and Wifis (SSID, BSSID, strength) to disk
  */
 public class WifiBroadcastReceiver extends BroadcastReceiver {
+
+    private String wifi1 = "Baahubali";
+    private String wifi1Mac1 = "0c:d2:b5:17:03:88";
+    private String wifi1Mac2 = "0c:d2:b5:17:03:88";
+    private int wifi1Strength = -37;
+    private String message1title = "You have an offer from Levi's";
+    private String message1body = "30% off on tshirts";
+
+    private String wifi2 = "Bahubali";
+    private String wifi2Mac1 = "0c:d2:b5:17:03:88";
+    private String wifi2Mac2 = "0c:d2:b5:17:03:88";
+    private int wifi2Strength = -42;
+    private String message2title = "You have an offer from addidas";
+    private String message2body = "Get 10% off on shir";
+
+
+
     private final MainActivity m;
 
     private final Comparator<ScanResult> RSSI_ORDER =
@@ -74,28 +91,64 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
             Notification.Builder builder = new Notification.Builder(m);
 
-            builder.setAutoCancel(false);
-            builder.setTicker("this is ticker text");
-            builder.setContentTitle(scanResultList.get(0).SSID + " Notification");
-            builder.setContentText("You have an offer from " + scanResultList.get(0).SSID);
-            builder.setSmallIcon(R.drawable.ic_launcher);
-            builder.setContentIntent(pendingIntent);
-            builder.setOngoing(true);
-            builder.setSubText(scanResultList.get(0).BSSID);   //API level 16
-            builder.setNumber(100);
-            builder.build();
 
-            myNotication = builder.getNotification();
-            myNotication.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
-            manager.notify(11, myNotication);
 
             if(NotificationFragment.mAdapter != null && NotificationFragment.mKeys != null)
             {
                 if(!NotificationFragment.mKeys.containsKey(scanResultList.get(0).BSSID)) {
 
-                    NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
-                    NotificationFragment.mAdapter.notifyDataSetChanged();
-                    NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                    String wifiName = scanResultList.get(0).SSID;
+                    String wifiMac = scanResultList.get(0).BSSID;
+                    int wifiLevel = scanResultList.get(0).level;
+                    if(wifiName.contains(wifi1) &&
+                            (wifiMac.contains(wifi1Mac1) || wifiMac.contains(wifi1Mac2)) &&
+                         wifiLevel <= wifi1Strength   )
+                    {
+                        builder.setAutoCancel(false);
+                        builder.setTicker("this is ticker text");
+                        builder.setContentTitle("Smart Cart");
+                        builder.setContentText(message1title);
+                        builder.setSmallIcon(R.drawable.ic_launcher);
+                        builder.setContentIntent(pendingIntent);
+                        builder.setOngoing(true);
+                        builder.setSubText(message1body);   //API level 16
+                        builder.setNumber(100);
+                        builder.build();
+
+                        myNotication = builder.getNotification();
+                        myNotication.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+                        manager.notify(11, myNotication);
+
+
+                        NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
+                        NotificationFragment.mAdapter.notifyDataSetChanged();
+                        NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                    }
+                    if(wifiName.contains(wifi2) &&
+                            (wifiMac.contains(wifi2Mac1) || wifiMac.contains(wifi2Mac2)) &&
+                            wifiLevel <= wifi2Strength   )
+                    {
+                        builder.setAutoCancel(false);
+                        builder.setTicker("this is ticker text");
+                        builder.setContentTitle("Smart Cart");
+                        builder.setContentText(message2title);
+                        builder.setSmallIcon(R.drawable.ic_launcher);
+                        builder.setContentIntent(pendingIntent);
+                        builder.setOngoing(true);
+                        builder.setSubText(message2body);   //API level 16
+                        builder.setNumber(100);
+                        builder.build();
+
+                        myNotication = builder.getNotification();
+                        myNotication.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+                        manager.notify(11, myNotication);
+
+
+                        NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
+                        NotificationFragment.mAdapter.notifyDataSetChanged();
+                        NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                    }
+
                 }
                 else
                 {

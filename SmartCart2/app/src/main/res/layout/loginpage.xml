@@ -5,73 +5,14 @@
     android:orientation="vertical" 
     android:background="@color/white6">
 
-    <Button
-        android:id="@+id/myCartButtonId"
-        style="@style/button_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/checkout"
-        android:text=" Start Shopping " />
     <TextView
-        android:id="@+id/minWifi"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You are near to wifi : "/>
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/myCartButtonId"
-        android:layout_marginBottom="36dp"
-        android:layout_marginLeft="70dp"
-        android:ems="10"
-        android:inputType="phone"
-        android:shape="rectangle" />
-
-    <TextView
-        android:id="@+id/productNametv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="Phone No."
-        android:textColor="@color/black2"
-        android:textSize="30dp"
-        android:textStyle="bold" />
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-        <LinearLayout
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tag_viewer_text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:autoLink="email|web"
-                android:text="intro message" />
-        </LinearLayout>
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/rfidtext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText1"
-        android:layout_centerHorizontal="true"
-        android:text="Phone No."
-        android:textColor="@color/black2"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:text="Press NFC card to continue"/>
 
 </LinearLayout>

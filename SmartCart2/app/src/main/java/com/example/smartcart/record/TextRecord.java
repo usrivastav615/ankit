@@ -46,9 +46,9 @@ public class TextRecord implements ParsedNdefRecord {
 
     public View getView(Activity activity, LayoutInflater inflater, ViewGroup parent, int offset) {
         View view =  inflater.inflate(R.layout.loginpage, parent, false);
-        TextView text = (TextView)view.findViewById(R.id.rfidtext);
-        text.setText(mText);
-        return text;
+//        TextView text = (TextView)view.findViewById(R.id.rfidtext);
+//        text.setText(mText);
+        return view;
     }
 
     public String getText() {

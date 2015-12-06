@@ -59,8 +59,8 @@ public class NdefMessageParser {
                 elements.add(SmartPoster.parse(record));
             } else {
 
-                TextView text = (TextView)mActivity.findViewById(R.id.rfidtext);
-                text.setText(new String(record.getPayload()));
+//                TextView text = (TextView)mActivity.findViewById(R.id.rfidtext);
+//                text.setText(new String(record.getPayload()));
             }
         }
         return elements;

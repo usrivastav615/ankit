@@ -120,9 +120,9 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         manager.notify(11, myNotication);
 
 
-                        NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
+                        NotificationFragment.mValues.add(message1body + "\n" + message1title);
                         NotificationFragment.mAdapter.notifyDataSetChanged();
-                        NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                        NotificationFragment.mKeys.put(wifiMac, true);
                     }
                     if(wifiName.contains(wifi2) &&
                             (wifiMac.contains(wifi2Mac1) || wifiMac.contains(wifi2Mac2)) &&
@@ -144,9 +144,9 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         manager.notify(11, myNotication);
 
 
-                        NotificationFragment.mValues.add("You have an offer from " + scanResultList.get(0).SSID + "\n" + scanResultList.get(0).BSSID);
+                        NotificationFragment.mValues.add(message2body + "\n" + message2title);
                         NotificationFragment.mAdapter.notifyDataSetChanged();
-                        NotificationFragment.mKeys.put(scanResultList.get(0).BSSID, true);
+                        NotificationFragment.mKeys.put(wifiMac, true);
                     }
 
                 }

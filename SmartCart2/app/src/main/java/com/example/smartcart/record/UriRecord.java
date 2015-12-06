@@ -18,11 +18,9 @@ package com.example.smartcart.record;
 import android.app.Activity;
 import android.net.Uri;
 import android.nfc.NdefRecord;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.smartcart.R;
 import com.google.common.base.Preconditions;
@@ -95,10 +93,10 @@ public class UriRecord implements ParsedNdefRecord {
 
     public View getView(Activity activity, LayoutInflater inflater, ViewGroup parent, int offset) {
         View view =  inflater.inflate(R.layout.loginpage, parent, false);
-        TextView text = (TextView)view.findViewById(R.id.rfidtext);
-        text.setAutoLinkMask(Linkify.ALL);
-        text.setText(mUri.toString());
-        return text;
+//        TextView text = (TextView)view.findViewById(R.id.rfidtext);
+//        text.setAutoLinkMask(Linkify.ALL);
+//        text.setText(mUri.toString());
+        return view;
     }
 
     public Uri getUri() {

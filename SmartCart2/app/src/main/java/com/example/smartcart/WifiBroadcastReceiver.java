@@ -42,6 +42,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
     private String message2body = "Get 10% off on shir";
 
 
+    public static boolean SNotificationSent = false;
+
 
     private final MainActivity m;
 
@@ -92,6 +94,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             Notification.Builder builder = new Notification.Builder(m);
 
 
+            SNotificationSent = false;
 
             if(NotificationFragment.mAdapter != null && NotificationFragment.mKeys != null)
             {
@@ -123,6 +126,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         NotificationFragment.mValues.add(message1body + "\n" + message1title);
                         NotificationFragment.mAdapter.notifyDataSetChanged();
                         NotificationFragment.mKeys.put(wifiMac, true);
+                        SNotificationSent = true;
                     }
                     if(wifiName.contains(wifi2) &&
                             (wifiMac.contains(wifi2Mac1) || wifiMac.contains(wifi2Mac2)) &&
@@ -147,6 +151,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                         NotificationFragment.mValues.add(message2body + "\n" + message2title);
                         NotificationFragment.mAdapter.notifyDataSetChanged();
                         NotificationFragment.mKeys.put(wifiMac, true);
+                        SNotificationSent = true;
                     }
 
                 }

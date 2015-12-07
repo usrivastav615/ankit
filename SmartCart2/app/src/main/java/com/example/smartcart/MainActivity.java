@@ -187,7 +187,16 @@ public class MainActivity extends FragmentActivity {
 			switch (position)
 			{
 				case 0 : return "Carts";
-				case 1 : return "Notifications";
+				case 1 :
+					if(NotificationFragment.mValues.size() == 0)
+					{
+						return "Notifications";
+					}
+					else
+					{
+						return "Notifications" + NotificationFragment.mValues.size();
+					}
+
 			}
 			return string;
 		}

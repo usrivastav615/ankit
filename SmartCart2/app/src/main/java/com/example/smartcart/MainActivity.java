@@ -188,15 +188,13 @@ public class MainActivity extends FragmentActivity {
 			{
 				case 0 : return "Carts";
 				case 1 :
-					if(NotificationFragment.mValues.size() == 0)
-					{
-						return "Notifications";
+					if(NotificationFragment.mValues != null) {
+						if (NotificationFragment.mValues.size() == 0) {
+							return "Notifications";
+						} else {
+							return "Notifications" + NotificationFragment.mValues.size();
+						}
 					}
-					else
-					{
-						return "Notifications" + NotificationFragment.mValues.size();
-					}
-
 			}
 			return string;
 		}
